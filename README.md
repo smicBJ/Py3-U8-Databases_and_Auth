@@ -10,3 +10,20 @@
 **SQL**:
 
 [SQLLite Downloads Page](https://www.sqlite.org/download.html)
+
+
+### Requirements File Guide
+
+To Create:
+```console
+
+pip freeze > requirements.txt
+
+```
+
+To Install:
+```console
+
+pip install -r requirements.txt
+
+```
