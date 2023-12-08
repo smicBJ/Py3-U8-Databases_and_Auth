@@ -86,8 +86,8 @@ async def update_task_by_id(task_id: int, task_data: Task):
         return {"msg": f"Task not found with id#{task_id}"}
 
 
-@router.delete("/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_task_by_id(task_id: int = Path(gt=0)):
+@router.delete("/{task_id}")
+async def delete_task_by_id(task_id: int):
     task_deleted = False
     for index in range(len(TASKS)):
         if task_id == TASKS[index].id:
