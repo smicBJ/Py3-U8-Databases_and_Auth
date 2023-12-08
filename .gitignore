@@ -53,3 +53,4 @@ wheels/
 # Mac system files
 .DS_Store
 unit8.db
+tasks.db
