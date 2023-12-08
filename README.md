@@ -9,7 +9,11 @@
 
 **SQL**:
 
-[SQLLite Downloads Page](https://www.sqlite.org/download.html)
+[SQLite Downloads Page](https://www.sqlite.org/download.html)
+
+**Homebrew**:
+
+[Homebrew Downloads Page](https://brew.sh)
 
 
 ### Requirements File Guide
