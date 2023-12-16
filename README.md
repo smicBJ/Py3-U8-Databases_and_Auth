@@ -15,6 +15,10 @@
 
 [Homebrew Downloads Page](https://brew.sh)
 
+**JWT**:
+
+[JWT Online Tool](https://jwt.io)
+
 
 ### Requirements File Guide
 
