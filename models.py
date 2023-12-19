@@ -1,6 +1,19 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from database import Base
 from sqlalchemy import Column, Integer, String, Boolean, DateTime
+
+
+class Users(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+    alt_name = Column(String)
+    email = Column(String)
+    password = Column(String)
+    role = Column(String)
+    is_active = Column(Boolean, default=True)
+    joined_on = Column(DateTime, default=datetime.now(timezone.utc))
 
 
 class Tasks(Base):
@@ -12,4 +25,4 @@ class Tasks(Base):
     description = Column(String)
     priority = Column(Integer)
     complete = Column(Boolean, default=False)
-    created_on = Column(DateTime, default=datetime.utcnow)
+    created_on = Column(DateTime, default=datetime.now(timezone.utc))
