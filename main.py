@@ -3,12 +3,13 @@ import uvicorn
 
 import models
 from database import engine
-from routers import tasks
+from routers import auth, tasks
 
 app = FastAPI()
 
 models.Base.metadata.create_all(bind=engine)
 
+app.include_router(auth.router, prefix="")
 app.include_router(tasks.router, prefix="/tasks")
 
 if __name__ == "__main__":
