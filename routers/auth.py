@@ -91,7 +91,7 @@ async def create_user(user: UserCreate, db: Session = Depends(get_db)):
 @router.get("/users/me", response_model=UserDBOut)
 async def get_user_profile(db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
     user = db.query(Users).filter(Users.id == current_user.get("id")).first()
-    print(type(user))
+
     if user is not None:
         return UserDBOut(**{
             "name": user.name,
@@ -100,10 +100,6 @@ async def get_user_profile(db: Session = Depends(get_db), current_user: dict = D
         })
 
     raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User profile not found")
-
-    # Get the user's id from the token
-    # Using id, we get the user form the database
-    # Return the user
 
 
 @router.post("/token", response_model=Token)
