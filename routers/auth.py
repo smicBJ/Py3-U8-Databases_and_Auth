@@ -21,6 +21,12 @@ JSON_SECRET = env.get("JSON_SECRET")
 JSON_ALG = env.get("JSON_ALG")
 
 
+class UserDBOut(BaseModel):
+    name: str
+    alt_name: str
+    email: str
+
+
 class UserCreate(BaseModel):
     name: str
     alt_name: str
@@ -61,6 +67,18 @@ def create_access_token(email: str, user_id: int, expires_delta: timedelta):
     return jwt.encode(encode, JSON_SECRET, algorithm=JSON_ALG)
 
 
+async def get_current_user(token: str = Depends(oauth2_bearer)):
+    try:
+        payload = jwt.decode(token, JSON_SECRET, algorithms=[JSON_ALG])
+        user_email: str = payload.get("sub")
+        user_id: int = payload.get("id")
+        if user_email is None or user_id is None:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Couldn't validate credentials")
+        return {"email": user_email, "id": user_id}
+    except JWTError:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Couldn't validate credentials")
+
+
 @router.post("/users", status_code=status.HTTP_201_CREATED)
 async def create_user(user: UserCreate, db: Session = Depends(get_db)):
     new_user = Users(**user.model_dump())
@@ -68,6 +86,24 @@ async def create_user(user: UserCreate, db: Session = Depends(get_db)):
 
     db.add(new_user)
     db.commit()
+
+
+@router.get("/users/me", response_model=UserDBOut)
+async def get_user_profile(db: Session = Depends(get_db), current_user: dict = Depends(get_current_user)):
+    user = db.query(Users).filter(Users.id == current_user.get("id")).first()
+    print(type(user))
+    if user is not None:
+        return UserDBOut(**{
+            "name": user.name,
+            "alt_name": user.alt_name,
+            "email": user.email
+        })
+
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User profile not found")
+
+    # Get the user's id from the token
+    # Using id, we get the user form the database
+    # Return the user
 
 
 @router.post("/token", response_model=Token)
