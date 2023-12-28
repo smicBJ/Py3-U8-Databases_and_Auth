@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 from database import Base
-from sqlalchemy import Column, Integer, String, Boolean, DateTime
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, ForeignKey
 
 
 class Users(Base):
@@ -21,7 +21,7 @@ class Tasks(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String)
-    author = Column(String)
+    author = Column(Integer, ForeignKey("users.id"))
     description = Column(String)
     priority = Column(Integer)
     complete = Column(Boolean, default=False)
